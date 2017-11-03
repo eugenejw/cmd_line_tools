@@ -3,18 +3,25 @@ from subprocess import call
 
 class FileVaultManager(object):
     def __init__(self):
-        self.dir = dir
-        self.targetDir = targetDir
+        self.dir = "."
+        self.targetDir = "./output"
         self.passwd = "Test"
 
-    def _getFileNames(self, dir=self.dir):
+    def _getFileNames(self, dir):
         return os.listdir(dir)
 
-    def compressAll(self, dir=".", target_dir="./output/", passwd=self.passwd):
+    def compressAll(self, dir="", target_dir="", passwd=""):
         """
         compress all files and directories
         :return: void
         """
+        if not dir:
+            dir = self.dir
+        if not target_dir:
+            target_dir = self.target_dir
+        if not passwd:
+            passwd = self.passwd
+
         target_dir = os.path.abspath(target_dir)
         if not os.path.exists(target_dir):
             os.makedirs(directory)
@@ -29,7 +36,14 @@ class FileVaultManager(object):
             print "Moving zipped file {} to folder {}".format(archive_name, target_dir)
             call(["mv", archive_name, target_dir])
 
-    def decompressAll(self, dir=".", target_dir="./output/"):
+    def decompressAll(self, dir="", target_dir="", passwd=""):
+        if not dir:
+            dir = self.dir
+        if not target_dir:
+            target_dir = self.target_dir
+        if not passwd:
+            passwd = self.passwd
+
         target_dir = os.path.abspath(target_dir)
         if not os.path.exists(target_dir):
             os.makedirs(directory)
@@ -37,16 +51,21 @@ class FileVaultManager(object):
         file_names = filter(lambda x: x.endswith('.archive'), file_names)
         for file in file_names:
             print "De-compressing {} ...".format(file)
-            call(["7z", "a", file, "-p" + PASSWD])
+            call(["7z", "a", file, "-p" + passwd])
             print "Removing zipped file {}".format(file)
             call(["rm", "-rf", file])
 
-    def flatAll(self, dir=".", target_dir="."):
+    def flatAll(self, dir="", target_dir=""):
         """
         Flat all files to parent dir
         :param dir:
         :return: void
         """
+        if not dir:
+            dir = self.dir
+        if not target_dir:
+            target_dir = self.target_dir
+
         target_dir = os.path.abspath(target_dir)
         self._flatAll(dir, target_dir)
 
