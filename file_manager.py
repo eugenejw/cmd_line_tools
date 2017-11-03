@@ -1,10 +1,10 @@
 import os
 from subprocess import call
 
-class FileVaultManager(object):
+class FileMgr(object):
     def __init__(self):
         self.dir = "."
-        self.targetDir = "./output"
+        self.target_dir = "./output"
         self.passwd = "Test"
 
     def _getFileNames(self, dir):
@@ -24,13 +24,13 @@ class FileVaultManager(object):
 
         target_dir = os.path.abspath(target_dir)
         if not os.path.exists(target_dir):
-            os.makedirs(directory)
+            os.makedirs(target_dir)
         file_names = self._getFileNames(dir)
         file_names = filter(lambda x: not x.startswith('.'), file_names)
         for file in file_names:
             if os.path.isfile(file) and os.stat(file).st_size < 10000000:
                 continue
-            archive_name = fName.split('.')[0] + ".archive"
+            archive_name = file.split('.')[0] + ".archive"
             print "Compressing {} as {}...".format(file, archive_name)
             call(["7z", "a", archive_name, file, "-p" + passwd])
             print "Moving zipped file {} to folder {}".format(archive_name, target_dir)
@@ -46,7 +46,7 @@ class FileVaultManager(object):
 
         target_dir = os.path.abspath(target_dir)
         if not os.path.exists(target_dir):
-            os.makedirs(directory)
+            os.makedirs(target_dir)
         file_names = self._getFileNames(dir)
         file_names = filter(lambda x: x.endswith('.archive'), file_names)
         for file in file_names:
