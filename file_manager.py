@@ -51,7 +51,7 @@ class FileMgr(object):
         file_names = filter(lambda x: x.endswith('.archive'), file_names)
         for file in file_names:
             print "De-compressing {} ...".format(file)
-            call(["7z", "a", file, "-p" + passwd])
+            call(["7z", "x", file, "-p" + passwd])
             print "Removing zipped file {}".format(file)
             call(["rm", "-rf", file])
 
